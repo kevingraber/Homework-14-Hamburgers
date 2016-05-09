@@ -8,7 +8,7 @@ var orm = require('./burger/config/orm.js');
 
 // Making the variable app an instance of express and defining the port. 
 var app = express();
-var PORT = process.env.PORT || 80;
+var appPORT = process.env.PORT || 80;
 
 // Middleware
 app.use(bodyParser.json());
@@ -42,6 +42,6 @@ app.get('/', function (req, res) {
 // });
 
 // Makes the server start listening. 
-app.listen(PORT, function(){
-	console.log("App is now listening on PORT: " + PORT);
+app.listen(appPORT, function(){
+	console.log("App is now listening on PORT: " + appPORT);
 });
