@@ -3,8 +3,8 @@ var express = require('express');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var path = require('path');
-var connection = require('./config/connection.js');
-var orm = require('./config/orm.js');
+var connection = require('./burger/config/connection.js');
+var orm = require('./burger/config/orm.js');
 
 // Making the variable app an instance of express and defining the port. 
 var app = express();
@@ -18,8 +18,8 @@ app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use(express.static('public'));
 
 // Requiring the files with routing information.
-require('./routing/api-routes.js')(app); 
-require('./routing/html-routes.js')(app);
+require('./burger/routing/api-routes.js')(app); 
+require('./burger/routing/html-routes.js')(app);
 
 // app.get('/', function (req, res) {
 //     res.sendFile(path.join(__dirname+'/public/index.html'));
