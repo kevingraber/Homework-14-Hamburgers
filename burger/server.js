@@ -1,53 +1,47 @@
+// Requiring Dependencies
 var express = require('express');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var path = require('path');
 var connection = require('./config/connection.js');
-var exphbs  = require('express-handlebars');
 var orm = require('./config/orm.js');
 
+// Making the variable app an instance of express and defining the port. 
 var app = express();
 var PORT = process.env.PORT || 80;
 
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
-app.set('view engine', 'handlebars');
-
+// Middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.text());
 app.use(bodyParser.json({type:'application/vnd.api+json'}));
 app.use(express.static('public'));
 
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname+'/public/index.html'));
-});
+// Requiring the files with routing information.
+require('./routing/api-routes.js')(app); 
+require('./routing/html-routes.js')(app);
 
-app.post('/delete', function (req, res) {
-	console.log('Server Log')
-    console.log(req.body.id)
-    orm.deleteBurger(req.body.id)
-});
+// app.get('/', function (req, res) {
+//     res.sendFile(path.join(__dirname+'/public/index.html'));
+// });
 
-app.get('/api', function (req, res) {
-    orm.selectAll(function(x){
-    	// console.log(x);
-    	res.json(x);
-    });
-});
+// app.post('/delete', function (req, res) {
+// 	console.log('Server Log')
+//     console.log(req.body.id)
+//     orm.deleteBurger(req.body.id)
+// });
 
-app.post('/api', function (req, res) {
+// app.get('/api', function (req, res) {
+//     orm.selectAll(function(x){
+//     	res.json(x);
+//     });
+// });
 
-	console.log('** req.body **')
-	console.log(req.body)
-	console.log(req.body.name)
-	orm.addToDatabase(req.body.name)
- //    connection.query(input, function(err,result){
-	// 	console.log(result);
-	// 	if (err) throw err;
-	// 	res.json(result);
-	// });
-});
+// app.post('/api', function (req, res) {
+// 	orm.addToDatabase(req.body.name)
+// });
 
+// Makes the server start listening. 
 app.listen(PORT, function(){
 	console.log("App is now listening on PORT: " + PORT);
 });

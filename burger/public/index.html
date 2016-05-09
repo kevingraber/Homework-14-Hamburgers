@@ -39,19 +39,25 @@
 
 $(document).ready(function(){
 
+	// Calls our renderBurger function to populate the page with all burgers from the database. 
 	renderBurgers();
 
+	// When called will render all burgers from the database onto the page. 
 	function renderBurgers() {
 
 		var originURL = document.location.origin; 
 
+		// Emptys the Divs that will be populated
 		$('#notEatenArea').empty()
 		$('#eatenArea').empty()
 
+		// AJAX call which will come back with info about the burgers in our database. 
 		$.ajax({url: originURL + '/api', method: 'GET'}).done(function(response){
 
 			console.log(response)
 
+			// For each burger in the database create a div and sort them based on if they are eaten or not.
+			// Burgers that haven't been eaten get a button which, when pressed, will changed them to eaten.
 			for (var i = 0; i < response.length; i++) {
 				var div = $('<div>')
 				var burgerp = $('<p>')
@@ -89,6 +95,7 @@ $(document).ready(function(){
 
 	};
 
+	// When the 'Submit' button is pressed make an AJAX call to the server which will then insert the burger into our database. 
 	$('#button').click(function(){
 
 		var originURL = document.location.origin; 
@@ -102,14 +109,14 @@ $(document).ready(function(){
 		$.post(originURL + '/api', burgerInfo).done(function(data){
 
 	    	console.log(burgerName);
-			// console.log(data);
 
 		});
 
+		// renderBurgers again to reflect the changes in the database. 
 		renderBurgers();
 
 	});
-	
+
 });
 
 </script>
