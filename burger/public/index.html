@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Burger App</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js'></script>
+</head>
+<body>
+
+<div class='container'>
+	<div class='jumbotron'>
+		<h1>EXTREMLY LOW BUDGET BURGERS</h1>
+	</div>
+	<div class='row'>
+		<div class='col-md-12'>
+			<input type='text' class='form-control' id='burgerInput'>
+			<button id='button'>Submit</button>
+		</div>
+	</div>
+	<br>
+	<div class='row'>
+		<div class='col-md-6'>
+			<h2>Not Eaten Burgers:</h2>
+			<br>
+			<br>
+			<span id='notEatenArea'></span>
+		</div>
+		<div class='col-md-6'>
+			<h2>Eaten Burgers:</h2>
+			<br>
+			<br>
+			<span id='eatenArea'></span>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+
+	renderBurgers();
+
+	function renderBurgers() {
+
+		var originURL = document.location.origin; 
+
+		$('#notEatenArea').empty()
+		$('#eatenArea').empty()
+
+		$.ajax({url: originURL + '/api', method: 'GET'}).done(function(response){
+
+			console.log(response)
+
+			for (var i = 0; i < response.length; i++) {
+				var div = $('<div>')
+				var burgerp = $('<p>')
+				burgerp.text(response[i].burger_name)
+				var button = $('<button>')
+				button.text('eat')
+				button.attr('data-id', response[i].id)
+
+				button.click(function(){
+					var deleteInfo = {
+						id: $(this).attr("data-id")
+					};
+					$.post(originURL + '/delete', deleteInfo).done(function(data){
+
+					});
+					renderBurgers();
+				});
+
+				if (response[i].devoured == 0) {
+					$('#notEatenArea').append(div)
+					div.append(burgerp)
+					div.append(button)
+					div.append('<br>')
+					div.append('<br>')
+				} else {
+					$('#eatenArea').append(div)
+					div.append(burgerp)
+					div.append('<br>')
+					div.append('<br>')
+				};
+
+			};
+
+		});
+
+	};
+
+	$('#button').click(function(){
+
+		var originURL = document.location.origin; 
+
+		var burgerInfo = {
+			name: $('#burgerInput').val()
+		};
+
+		$('#burgerInput').val(null);
+
+		$.post(originURL + '/api', burgerInfo).done(function(data){
+
+	    	console.log(burgerName);
+			// console.log(data);
+
+		});
+
+		renderBurgers();
+
+	});
+	
+});
+
+</script>
+</body>
+</html>
